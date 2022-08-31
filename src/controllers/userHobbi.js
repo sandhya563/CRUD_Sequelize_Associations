@@ -1,9 +1,8 @@
-const Sequelize = require("sequelize");
+const { Sequelize, Op } = require("sequelize");
 const db = require("../models");
 const User_Hobbis = db.user_hobbis;
 const User_Info = db.user_infos;
 const User = db.users;
-const { Op } = require("sequelize");
 
 // Create and Save a new user
 async function createUserHobbisAccount(req, res) {
@@ -158,8 +157,7 @@ async function hobbies(req, res) {
   User_Hobbis.findAll({
     where: {
       hobbis: {
-        //  [Op.like]: req.body.hobbis
-        [Op.iLike]: { [Op.any]: [req.body.hobbis]},
+        [Op.iLike]: { [Op.any]: req.body.hobbis},
       },
     },
     include: [

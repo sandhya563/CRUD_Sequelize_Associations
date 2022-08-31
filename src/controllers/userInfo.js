@@ -12,7 +12,7 @@ async function createUseInfoAccount(req, res) {
       user_id: req.body.user_id,
     };
     const usersData = await User_Info.create(obj);
-    res.status(201).send(usersData);
+    res.status(201).send(usersData);  
   } catch (e) {
     console.log(e);
     res.status(500).send(e);

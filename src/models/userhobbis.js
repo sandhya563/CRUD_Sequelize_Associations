@@ -1,4 +1,3 @@
-const { TEXT } = require("sequelize");
 module.exports = (sequelize, Sequelize) => {
   const User_Hobbis = sequelize.define("user_hobbis", {
     id: {
@@ -9,9 +8,19 @@ module.exports = (sequelize, Sequelize) => {
     },
     hobbis: {
       type: Sequelize.STRING,
+      validate:{
+        isAlpha:{
+          msg: "The hobbis must be an contain latters like this 'Dancing' ",
+        },
+      },
     },
     user_id: {
       type: Sequelize.INTEGER,
+      validate:{
+        isInt: {
+          msg: "The user_id must be an contain integer ",
+        },
+      },
     },
     createdAt: {
       allowNull: false,
