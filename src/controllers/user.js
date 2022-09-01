@@ -5,14 +5,15 @@ const User = db.users;
 // Create and Save a new user
 async function createUserAccount(req, res) {
   try {
-    const body = req.body;
     const obj = {
       user_name: req.body.user_name
     };
-    console.log(obj, "obj");
     const userCollection = await User.create(obj);
-    console.log("data", userCollection);
-    res.status(201).send(userCollection);
+    res.status(201).send({
+      status: "success",
+      statusCode: "statusCode 201",
+      data: userCollection,
+    });
   } catch (e) {
     console.log(e);
     res.status(500).send(e);
@@ -23,8 +24,11 @@ async function createUserAccount(req, res) {
 function allData(req, res) {
   User.findAll()
     .then((user) => {
-      console.log(user, "data");
-      return res.status(200).json(user);
+      return res.json({
+        status: "success",
+        statusCode: "statusCode 200",
+        data: user,
+      });
     })
     .catch((error) => {
       return res.status(400).json(error);
@@ -37,7 +41,11 @@ async function findOne(req, res) {
   User.findOne({where:{id: id}})
     .then((data) => {
       if (data) {
-        res.send(data);
+        res.send({
+          status: "success",
+          statusCode: "statusCode 200",
+          data: data,
+        });
       } else {
         res.status(404).send({
           message: `Cannot find data with id ${id}`,
@@ -60,7 +68,11 @@ async function updateData(req, res) {
   await User.update({user_name},{ where: {id: id } });
   let data = await User.findByPk(id);
   if(data){
-     return res.json({message:"data updated successfully",data});
+     return res.json({
+      status: "success",
+      statusCode: "statusCode 204",
+      data: data,
+    });
   }else{
     return res.status(404).send({ error: "user not found" });
   }
@@ -75,7 +87,8 @@ async function destroy(req, res){
         return res.status(404).send({ error: "user not found" });
       }
       return res.status(200).send({
-        message: "User deleted",
+        status: "success data deleted",
+        statusCode: "statusCode 204"
       });
     })
     .catch(() => {

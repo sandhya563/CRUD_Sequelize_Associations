@@ -14,4 +14,10 @@ router.delete('/api/deleteUserDataById/:id', userController.destroy)
 
 router.get('/api/getHobbies', userController.hobbies)
 
+router.post('/api/multipleUsersOneRegistration',userController.createMultipleAccountOne)
+router.post('/api/multipleUsersTwoRegistration',userController.createMultipleAccountTwo)
+router.post('/api/multipleUsersThreeRegistration',userController.createMultipleAccountThree)
+
+
+
 module.exports = router

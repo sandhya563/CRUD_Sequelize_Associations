@@ -3,8 +3,9 @@ const express = require('express');
 const userRoutes = require('./src/routes/user')
 const userInfoRoutes = require('./src/routes/userInfo')
 const userHobbiRoutes = require('./src/routes/userhobbis')
-const app = express();
 const db = require("./src/models/index");
+
+const app = express();
 db.sequelize.sync();
 app.use(express.json());
 

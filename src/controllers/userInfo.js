@@ -5,7 +5,6 @@ const User = db.users;
 // Create and Save a new user
 async function createUseInfoAccount(req, res) {
   try {
-    const body = req.body;
     const obj = {
       address: req.body.address,
       email: req.body.email,

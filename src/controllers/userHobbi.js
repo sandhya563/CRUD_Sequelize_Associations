@@ -7,13 +7,16 @@ const User = db.users;
 // Create and Save a new user
 async function createUserHobbisAccount(req, res) {
   try {
-    const body = req.body;
     const obj = {
       user_id: req.body.user_id,
       hobbis: req.body.hobbis,
     };
     const userCollection = await User_Hobbis.create(obj);
-    res.status(201).send(userCollection);
+    res.send({
+      status: "success",
+      statusCode: "statusCode 201",
+      data: userCollection,
+    });
   } catch (e) {
     console.log(e);
     res.status(500).send(e);
@@ -57,7 +60,11 @@ function allData(req, res) {
         }
         return false;
       });
-      return res.status(200).json(unique);
+      return res.json({
+        status: "success",
+        statusCode: "statusCode 200",
+        data: unique,
+      });
     })
     .catch((error) => {
       console.log(error);
@@ -78,11 +85,6 @@ async function findone(req, res) {
         model: User,
       },
     ],
-    //   include: [{
-    //     model:  User_Info,
-    //     model: User,
-    //     where: {user_id: req.body.user_id}
-    // }],
   })
     .then((data) => {
       if (data) {
@@ -108,7 +110,11 @@ async function findone(req, res) {
           }
           return false;
         });
-        return res.status(200).json(unique);
+        return res.status(200).json({
+          status: "success",
+          statusCode: "statusCode 200",
+          data: unique,
+        });
       } else {
         res.status(404).send({
           message: `Cannot find data with id ${user_id}`,
@@ -129,7 +135,7 @@ async function updateData(req, res) {
   await User_Hobbis.update({ hobbis }, { where: { id: id } });
   let data = await User_Hobbis.findByPk(id);
   if (data) {
-    return res.json({ message: "data updated successfully", data });
+    return res.json({ message: "data updated successfully", data:data });
   } else {
     return res.status(404).send({ error: "user not found" });
   }
@@ -157,7 +163,7 @@ async function hobbies(req, res) {
   User_Hobbis.findAll({
     where: {
       hobbis: {
-        [Op.iLike]: { [Op.any]: req.body.hobbis},
+        [Op.iLike]: { [Op.any]: req.body.hobbis },
       },
     },
     include: [
@@ -171,7 +177,6 @@ async function hobbies(req, res) {
     ],
   })
     .then((data) => {
-      // console.log("data", data);
       if (data) {
         res.send(data);
       } else {
@@ -187,6 +192,117 @@ async function hobbies(req, res) {
     });
 }
 
+// Post API 1 insert data at time in multiple tables
+async function createMultipleAccountOne(req, res) {
+  try {
+    const body = req.body;
+    var userInfoCollection;
+    var userHobbiesCollection;
+    const usersCollection = await User.create({ user_name: body.user_name });
+    await User_Info.findByPk(usersCollection.id).then(async () => {
+      userInfoCollection = await User_Info.create({
+        address: body.address,
+        email: body.email,
+        user_id: usersCollection.id,
+      });
+    });
+    await User_Hobbis.findByPk(usersCollection.id).then(async () => {
+      userHobbiesCollection = await User_Hobbis.create({
+        hobbis: body.hobbis,
+        user_id: usersCollection.id,
+      });
+    });
+    res.status(201).send({
+      status: "data inserted successfully",
+      statusCode: "statusCode 201",
+      data: [usersCollection, userInfoCollection, userHobbiesCollection],
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
+  }
+}
+
+// Post Api 2 insert data at time in multiple tables
+async function createMultipleAccountTwo(req, res) {
+  try {
+    var usersCollection;
+    var userInfoCollection;
+    var userHobbiesCollection;
+    var body = req.body;
+    let usersData = [];
+    for (var i in body) {
+      usersCollection = await User.create({ user_name: body[i].user_name });
+      await User_Info.findByPk(usersCollection.id).then(async () => {
+        userInfoCollection = await User_Info.create({
+          address: body[i].address,
+          email: body[i].email,
+          user_id: usersCollection.id,
+        });
+      });
+      await User_Hobbis.findByPk(usersCollection.id).then(async () => {
+        userHobbiesCollection = await User_Hobbis.create({
+          hobbis: body[i].hobbis,
+          user_id: usersCollection.id,
+        });
+      });
+      usersData.push(
+        usersCollection,
+        userInfoCollection,
+        userHobbiesCollection
+      );
+    }
+    res.status(201).send({
+      status: "data inserted successfully",
+      statusCode: "statusCode 201",
+      data: usersData,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
+  }
+}
+
+// Post Api 2 insert data at time in multiple tables
+async function createMultipleAccountThree(req, res) {
+  try {
+    var usersCollection;
+    var userInfoCollection;
+    var userHobbiesCollection;
+    var body = req.body;
+    let usersData = [];
+    for (var i in body) {
+      usersCollection = await User.create({ user_name: body[i].user_name });
+      await User_Info.findByPk(usersCollection.id).then(async () => {
+        userInfoCollection = await User_Info.create({
+          address: body[i].address,
+          email: body[i].email,
+          user_id: usersCollection.id,
+        });
+      });
+      await User_Hobbis.findByPk(usersCollection.id).then(async () => {
+        userHobbiesCollection = await User_Hobbis.create({
+          hobbis: body[i].hobbis,
+          user_id: usersCollection.id,
+        });
+      });
+      usersData.push(
+        usersCollection,
+        userInfoCollection,
+        userHobbiesCollection
+      );
+    }
+    res.status(201).send({
+      status: "data inserted successfully",
+      statusCode: "statusCode 201",
+      data: usersData,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
+  }
+}
+
 module.exports = {
   createUserHobbisAccount,
   findone,
@@ -194,4 +310,7 @@ module.exports = {
   destroy,
   allData,
   hobbies,
+  createMultipleAccountOne,
+  createMultipleAccountTwo,
+  createMultipleAccountThree
 };
