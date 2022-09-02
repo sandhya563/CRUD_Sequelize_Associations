@@ -11,7 +11,7 @@ async function createUseInfoAccount(req, res) {
       user_id: req.body.user_id,
     };
     const usersData = await User_Info.create(obj);
-    res.status(201).send(usersData);  
+    res.status(201).send(usersData);
   } catch (e) {
     console.log(e);
     res.status(500).send(e);
@@ -39,7 +39,7 @@ function index(req, res) {
 // // Find a single data with an id
 async function findOne(req, res) {
   const id = req.params.id;
-  User_Info.findOne({where:{user_id: id}})
+  User_Info.findOne({ where: { user_id: id } })
     .then((data) => {
       if (data) {
         res.send(data);
@@ -60,14 +60,14 @@ async function findOne(req, res) {
 
 async function updateData(req, res) {
   let id = req.params.id;
-  const { email} = req.body;
-  await User_Info.update({ email}, { where: { id: id } });
+  const { email } = req.body;
+  await User_Info.update({ email }, { where: { id: id } });
   let data = await User_Info.findByPk(id);
-  if(data){
-    return res.json({message:"data updated successfully",data});
- }else{
-   return res.status(404).send({ error: "user not found" });
- }
+  if (data) {
+    return res.json({ message: "data updated successfully", data });
+  } else {
+    return res.status(404).send({ error: "user not found" });
+  }
 }
 
 // // Delete a table data with the specified id in the request
@@ -86,6 +86,5 @@ async function destroy(req, res) {
       return res.status(404).send({ error: "user not found" });
     });
 }
-
 
 module.exports = { createUseInfoAccount, index, findOne, updateData, destroy };

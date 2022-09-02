@@ -8,11 +8,6 @@ module.exports = (sequelize, Sequelize) => {
     },
     hobbis: {
       type: Sequelize.STRING,
-      validate:{
-        isAlpha:{
-          msg: "The hobbis must be an contain latters like this 'Dancing' ",
-        },
-      },
     },
     user_id: {
       type: Sequelize.INTEGER,

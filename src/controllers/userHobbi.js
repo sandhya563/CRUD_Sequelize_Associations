@@ -135,7 +135,7 @@ async function updateData(req, res) {
   await User_Hobbis.update({ hobbis }, { where: { id: id } });
   let data = await User_Hobbis.findByPk(id);
   if (data) {
-    return res.json({ message: "data updated successfully", data:data });
+    return res.json({ message: "data updated successfully", data: data });
   } else {
     return res.status(404).send({ error: "user not found" });
   }
@@ -263,39 +263,46 @@ async function createMultipleAccountTwo(req, res) {
   }
 }
 
-// Post Api 2 insert data at time in multiple tables
+// Post Api 3 insert data at time in multiple tables
 async function createMultipleAccountThree(req, res) {
   try {
     var usersCollection;
     var userInfoCollection;
     var userHobbiesCollection;
     var body = req.body;
-    let usersData = [];
-    for (var i in body) {
-      usersCollection = await User.create({ user_name: body[i].user_name });
-      await User_Info.findByPk(usersCollection.id).then(async () => {
-        userInfoCollection = await User_Info.create({
-          address: body[i].address,
-          email: body[i].email,
-          user_id: usersCollection.id,
-        });
+    let usersData;
+    // for (var i in body) {
+    usersCollection = await User.create({
+      user_name: body[0].user.user_name,
+    });
+
+    await User_Info.findByPk(usersCollection.id).then(async () => {
+      userInfoCollection = await User_Info.create({
+        address: body[0].info.address,
+        email: body[0].info.email,
+        user_id: usersCollection.id,
       });
-      await User_Hobbis.findByPk(usersCollection.id).then(async () => {
+    });
+
+    await User_Hobbis.findByPk(usersCollection.id).then(async () => {
+      for (let i = 0; i < body[0].hosbbies.hobbis.length; i++) {
         userHobbiesCollection = await User_Hobbis.create({
-          hobbis: body[i].hobbis,
+          hobbis: body[0].hosbbies.hobbis[i],
           user_id: usersCollection.id,
         });
-      });
-      usersData.push(
-        usersCollection,
-        userInfoCollection,
-        userHobbiesCollection
-      );
-    }
+      }
+    });
+
+    usersData = {
+      user: usersCollection,
+      info: userInfoCollection,
+      hobbies: userHobbiesCollection,
+    };
+    // }
     res.status(201).send({
       status: "data inserted successfully",
       statusCode: "statusCode 201",
-      data: usersData,
+      data: [usersData],
     });
   } catch (e) {
     console.log(e);
@@ -312,5 +319,5 @@ module.exports = {
   hobbies,
   createMultipleAccountOne,
   createMultipleAccountTwo,
-  createMultipleAccountThree
+  createMultipleAccountThree,
 };

@@ -8,8 +8,8 @@ module.exports = (sequelize, Sequelize) => {
     },
     user_name: {
       type: Sequelize.STRING,
-      validate:{
-        isAlpha:{
+      validate: {
+        isAlpha: {
           msg: "The user_name must be an contain latters like this 'Sandhya' ",
         },
       },

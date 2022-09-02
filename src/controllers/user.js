@@ -1,4 +1,3 @@
-
 const db = require("../models");
 const User = db.users;
 
@@ -6,7 +5,7 @@ const User = db.users;
 async function createUserAccount(req, res) {
   try {
     const obj = {
-      user_name: req.body.user_name
+      user_name: req.body.user_name,
     };
     const userCollection = await User.create(obj);
     res.status(201).send({
@@ -38,7 +37,7 @@ function allData(req, res) {
 // Find a single data with an id
 async function findOne(req, res) {
   const id = req.params.id;
-  User.findOne({where:{id: id}})
+  User.findOne({ where: { id: id } })
     .then((data) => {
       if (data) {
         res.send({
@@ -64,22 +63,22 @@ async function findOne(req, res) {
 
 async function updateData(req, res) {
   let id = req.params.id;
-  const {user_name} = req.body;
-  await User.update({user_name},{ where: {id: id } });
+  const { user_name } = req.body;
+  await User.update({ user_name }, { where: { id: id } });
   let data = await User.findByPk(id);
-  if(data){
-     return res.json({
+  if (data) {
+    return res.json({
       status: "success",
       statusCode: "statusCode 204",
       data: data,
     });
-  }else{
+  } else {
     return res.status(404).send({ error: "user not found" });
   }
 }
 
 //  Delete a table data with the specified id in the request
-async function destroy(req, res){
+async function destroy(req, res) {
   let id = req.params.id;
   await User.destroy({ where: { id: id } })
     .then((count) => {
@@ -88,7 +87,7 @@ async function destroy(req, res){
       }
       return res.status(200).send({
         status: "success data deleted",
-        statusCode: "statusCode 204"
+        statusCode: "statusCode 204",
       });
     })
     .catch(() => {
@@ -96,4 +95,4 @@ async function destroy(req, res){
     });
 }
 
-module.exports = {createUserAccount, allData, findOne, updateData, destroy}
+module.exports = { createUserAccount, allData, findOne, updateData, destroy };
