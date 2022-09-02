@@ -277,11 +277,11 @@ async function createMultipleAccountThree(req, res) {
     });
 
     await User_Info.findByPk(usersCollection.id).then(async () => {
-      userInfoCollection = await User_Info.create({
+      userInfoCollection = await User_Info.bulkCreate([{
         address: body[0].info.address,
         email: body[0].info.email,
         user_id: usersCollection.id,
-      });
+      }]);
     });
 
     await User_Hobbis.findByPk(usersCollection.id).then(async () => {
