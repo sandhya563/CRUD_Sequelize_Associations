@@ -8,11 +8,11 @@ module.exports = (sequelize, Sequelize) => {
     },
     address: {
       type: Sequelize.STRING,
-      validate: {
-        isAlpha: {
-          msg: "The address must be an contain latters like this 'Delhi' ",
-        },
-      },
+      // validate: {
+      //   isAlpha: {
+      //     msg: "The address must be an contain latters like this 'Delhi' ",
+      //   },
+      // },
     },
     email: {
       type: Sequelize.STRING,
