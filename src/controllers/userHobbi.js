@@ -7,11 +7,17 @@ const User = db.users;
 // Create and Save a new user
 async function createUserHobbisAccount(req, res) {
   try {
+    // let userCollection;
+    const body = req.body
     const obj = {
-      user_id: req.body.user_id,
-      hobbis: req.body.hobbis,
+      user_id: body.user_id,
+      hobbis: body.hobbis,
     };
+    // for (let i = 0; i < body.hobbis.length; i++) {
+      // userCollection = await User_Hobbis.create({user_id: body.user_id,hobbis: body.hobbis[i]});
+    // }
     const userCollection = await User_Hobbis.create(obj);
+    
     res.send({
       status: "success",
       statusCode: "statusCode 201",
@@ -28,7 +34,7 @@ function allData(req, res) {
     include: [
       {
         model: User_Info,
-        as: "user_infos",
+        // as: "user_infos",
       },
       {
         model: User,
@@ -275,7 +281,6 @@ async function createMultipleAccountThree(req, res) {
     usersCollection = await User.create({
       user_name: body[0].user.user_name,
     });
-
     await User_Info.findByPk(usersCollection.id).then(async () => {
       userInfoCollection = await User_Info.bulkCreate([{
         address: body[0].info.address,
@@ -283,7 +288,6 @@ async function createMultipleAccountThree(req, res) {
         user_id: usersCollection.id,
       }]);
     });
-
     await User_Hobbis.findByPk(usersCollection.id).then(async () => {
       for (let i = 0; i < body[0].hosbbies.hobbis.length; i++) {
         userHobbiesCollection = await User_Hobbis.create({
@@ -292,12 +296,12 @@ async function createMultipleAccountThree(req, res) {
         });
       }
     });
-
     usersData = {
       user: usersCollection,
       info: userInfoCollection,
       hobbies: userHobbiesCollection,
     };
+    console.log("usersData", usersData);
     // }
     res.status(201).send({
       status: "data inserted successfully",
